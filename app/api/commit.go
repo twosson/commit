@@ -17,13 +17,13 @@ type commitApi struct{}
 
 // Index is a demonstration route handler for output "Hello World!".
 func (*commitApi) Index(r *ghttp.Request) {
-	g.Log("commit").Infof("commit start: %s", time.Now().String())
 	var data *model.CommitReq
 	if err := r.Parse(&data); err != nil {
 		g.Log("commit").Errorf("commit err: %s", err.Error())
 		response.JsonExit(r, 1, err.Error())
 		return
 	}
+	g.Log("commit").Infof("commit start miner: %d, sector: %d, time: %s", data.MinerNumber, data.SectorNumber, time.Now().String())
 	phase1Output, err := base64.StdEncoding.DecodeString(data.Phase1Output)
 	if err != nil {
 		g.Log("commit").Errorf("commit err: %s", err.Error())
