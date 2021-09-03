@@ -6,6 +6,9 @@
 	LogPath           = "/tmp/log/gf-app/server"
 	maxHeaderBytes    = "20KB"
 	clientMaxBodySize = "200MB"
+	readTimeout       = "0"
+	writeTimeout      = "0"
+	IdleTimeout       = "0"
 
 # Logger.
 [logger]
