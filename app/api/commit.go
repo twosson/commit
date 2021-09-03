@@ -6,28 +6,33 @@ import (
 	"encoding/base64"
 	ffi "github.com/filecoin-project/filecoin-ffi"
 	"github.com/filecoin-project/go-state-types/abi"
+	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
+	"time"
 )
 
 var Commit = commitApi{}
 
-type commitApi struct {}
+type commitApi struct{}
 
 // Index is a demonstration route handler for output "Hello World!".
 func (*commitApi) Index(r *ghttp.Request) {
-
+	g.Log("commit").Infof("commit start: %s", time.Now().String())
 	var data *model.CommitReq
 	if err := r.Parse(&data); err != nil {
+		g.Log("commit").Errorf("commit err: %s", err.Error())
 		response.JsonExit(r, 1, err.Error())
 		return
 	}
 	phase1Output, err := base64.StdEncoding.DecodeString(data.Phase1Output)
 	if err != nil {
+		g.Log("commit").Errorf("commit err: %s", err.Error())
 		response.JsonExit(r, 1, err.Error())
 		return
 	}
 	proof, err := ffi.SealCommitPhase2(phase1Output, abi.SectorNumber(data.SectorNumber), abi.ActorID(data.MinerNumber))
 	if err != nil {
+		g.Log("commit").Errorf("commit err: %s", err.Error())
 		response.JsonExit(r, 1, err.Error())
 		return
 	}
@@ -38,6 +43,6 @@ func (*commitApi) Index(r *ghttp.Request) {
 		Proof:        base64.StdEncoding.EncodeToString(proof),
 	}
 
+	g.Log("commit").Infof("commit end: %s", time.Now().String())
 	response.Json(r, 0, "success", rsp)
 }
-
